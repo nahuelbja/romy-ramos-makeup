@@ -43,7 +43,7 @@ export default function Hero() {
       id="inicio"
       style={{
         width: '100%',
-        minHeight: '90vh',
+        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -52,6 +52,7 @@ export default function Hero() {
         position: 'relative',
         textAlign: 'center',
         overflow: 'hidden',
+        background: 'var(--ivoire)',
       }}
     >
       {/* Background slideshow */}
@@ -75,7 +76,7 @@ export default function Hero() {
             src={HERO_IMAGES[current]}
             alt="Romy Ramos Makeup"
             fill
-            style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            style={{ objectFit: 'contain', objectPosition: 'center center' }}
             priority={current === 0}
             sizes="100vw"
           />
