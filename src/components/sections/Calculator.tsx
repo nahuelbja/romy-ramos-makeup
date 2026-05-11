@@ -67,14 +67,12 @@ export default function Calculator() {
     const subtotalBase = base + extras;
 
     let trasladoPrice = 0;
-    if (serviceType === 'novia') {
-      if (city === 'asuncion') {
-        trasladoPrice = 400000;
-        extrasBreakdown.push({ label: 'Traslado — Asunción y alrededores', price: trasladoPrice });
-      } else if (city === 'outside') {
-        trasladoPrice = Math.round(subtotalBase * 0.30);
-        extrasBreakdown.push({ label: 'Traslado — Fuera del área (+30%)', price: trasladoPrice });
-      }
+    if (city === 'asuncion' && serviceType === 'novia') {
+      trasladoPrice = 400000;
+      extrasBreakdown.push({ label: 'Traslado — Asunción y alrededores', price: trasladoPrice });
+    } else if (city === 'outside') {
+      trasladoPrice = Math.round(subtotalBase * 0.30);
+      extrasBreakdown.push({ label: 'Fuera de Asunción y alrededores (+30%)', price: trasladoPrice });
     }
 
     return {
@@ -106,6 +104,10 @@ export default function Calculator() {
 
   const isNovia = serviceType === 'novia';
   const nonTrasladoExtras = currentService.extras;
+  const SOCIAL_GLAM_ZONE_OPTIONS = [
+    { id: 'asuncion', label: 'Asunción y alrededores' },
+    { id: 'outside', label: 'Fuera del área (+30%)' },
+  ];
 
   return (
     <section
@@ -260,33 +262,34 @@ export default function Calculator() {
               ))}
             </div>
 
-            {/* Traslado — only for novia */}
-            {isNovia && (
-              <div style={{ paddingTop: '20px' }}>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: '11px',
-                    fontWeight: 500,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.3em',
-                    color: 'rgba(255,255,255,0.35)',
-                    paddingBottom: '16px',
-                  }}
-                >
-                  Traslado a domicilio
-                </div>
-                <ToggleGroup
-                  options={TRASLADO_OPTIONS.map((o) => ({
-                    id: o.id,
-                    label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+30%)',
-                  }))}
-                  selected={city}
-                  onChange={(v) => setCity(v as CityOption)}
-                  ariaLabel="Seleccionar zona de traslado"
-                />
+            {/* Zona / Traslado — all services */}
+            <div style={{ paddingTop: '20px' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.3em',
+                  color: 'rgba(255,255,255,0.35)',
+                  paddingBottom: '16px',
+                }}
+              >
+                {isNovia ? 'Traslado a domicilio' : 'Zona del servicio'}
               </div>
-            )}
+              <ToggleGroup
+                options={isNovia
+                  ? TRASLADO_OPTIONS.map((o) => ({
+                      id: o.id,
+                      label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+30%)',
+                    }))
+                  : SOCIAL_GLAM_ZONE_OPTIONS
+                }
+                selected={city}
+                onChange={(v) => setCity(v as CityOption)}
+                ariaLabel="Seleccionar zona del servicio"
+              />
+            </div>
           </div>
 
           {/* Total bar */}
