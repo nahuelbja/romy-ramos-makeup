@@ -7,10 +7,12 @@ import Services from '@/components/sections/Services';
 import Calculator from '@/components/sections/Calculator';
 import Contact from '@/components/sections/Contact';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import ScrollToTop from '@/components/ScrollToTop';
 
 export default function Home() {
   return (
     <>
+      <ScrollToTop />
       <TopBar />
       <Header />
       <main>
