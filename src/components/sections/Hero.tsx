@@ -41,16 +41,10 @@ export default function Hero() {
   return (
     <section
       id="inicio"
+      className="hero-section"
       style={{
         width: '100%',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '120px 40px 100px',
         position: 'relative',
-        textAlign: 'center',
         overflow: 'hidden',
         background: 'var(--ivoire)',
       }}
@@ -76,7 +70,7 @@ export default function Hero() {
             src={HERO_IMAGES[current]}
             alt="Romy Ramos Makeup"
             fill
-            style={{ objectFit: 'contain', objectPosition: 'center center' }}
+            style={{ objectFit: 'cover', objectPosition: 'center center' }}
             priority={current === 0}
             sizes="100vw"
           />
@@ -96,8 +90,20 @@ export default function Hero() {
         }}
       />
 
-      {/* Content — z-index above overlay */}
-      <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Content — positioned within first viewport */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '120px 40px 100px',
+          textAlign: 'center',
+        }}
+      >
         {/* Label */}
         <motion.div
           initial="hidden"
@@ -255,32 +261,45 @@ export default function Hero() {
             />
           ))}
         </motion.div>
+
+        {/* Scroll indicator — bottom of first viewport */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          style={{
+            position: 'absolute',
+            bottom: '32px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            color: 'var(--cendre)',
+          }}
+        >
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+          >
+            <ChevronDown size={18} strokeWidth={1.5} />
+          </motion.div>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        style={{
-          position: 'absolute',
-          bottom: '32px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          color: 'var(--cendre)',
-          zIndex: 2,
-        }}
-      >
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-        >
-          <ChevronDown size={18} strokeWidth={1.5} />
-        </motion.div>
-      </motion.div>
+      <style jsx global>{`
+        @media (min-width: 769px) {
+          .hero-section {
+            aspect-ratio: 4 / 5;
+            min-height: 100vh;
+          }
+        }
+        @media (max-width: 768px) {
+          .hero-section {
+            min-height: 100vh;
+          }
+        }
+      `}</style>
     </section>
   );
 }
