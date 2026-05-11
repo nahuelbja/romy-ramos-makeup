@@ -6,7 +6,6 @@ import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 
 const HERO_IMAGES = [
-  '/IMG_0215.jpeg',
   '/IMG_0218.jpeg',
   '/IMG_0219.jpeg',
   '/IMG_0220.jpeg',
