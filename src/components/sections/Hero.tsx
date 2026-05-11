@@ -42,6 +42,7 @@ export default function Hero() {
     <section
       id="inicio"
       style={{
+        width: '100%',
         minHeight: '90vh',
         display: 'flex',
         flexDirection: 'column',
@@ -63,7 +64,10 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
             position: 'absolute',
-            inset: 0,
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             zIndex: 0,
           }}
         >
@@ -82,7 +86,10 @@ export default function Hero() {
       <div
         style={{
           position: 'absolute',
-          inset: 0,
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           background: 'rgba(255, 255, 255, 0.78)',
           zIndex: 1,
         }}
