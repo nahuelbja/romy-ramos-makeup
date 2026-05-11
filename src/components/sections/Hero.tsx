@@ -11,6 +11,8 @@ const HERO_IMAGES = [
   '/hero-3.jpg',
   '/hero-4.jpg',
   '/hero-5.jpg',
+  '/hero-6.jpg',
+  '/hero-7.jpg',
 ];
 
 const INTERVAL_MS = 4500;
