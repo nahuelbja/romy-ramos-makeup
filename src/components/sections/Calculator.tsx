@@ -71,10 +71,14 @@ export default function Calculator() {
       trasladoPrice = 400000;
       extrasBreakdown.push({ label: 'Traslado — Asunción y alrededores', price: trasladoPrice });
     } else if (city === 'outside') {
-      const fijo = 400000;
-      const porcentaje = Math.round(subtotalBase * 0.25);
-      trasladoPrice = fijo + porcentaje;
-      extrasBreakdown.push({ label: `Fuera del área — Gs. 400.000 + 25% (${formatGs(porcentaje)})`, price: trasladoPrice });
+      if (serviceType === 'novia') {
+        const porcentaje = Math.round(subtotalBase * 0.25);
+        trasladoPrice = 400000 + porcentaje;
+        extrasBreakdown.push({ label: `Fuera del área — Gs. 400.000 + 25% (${formatGs(porcentaje)})`, price: trasladoPrice });
+      } else {
+        trasladoPrice = Math.round(subtotalBase * 0.25);
+        extrasBreakdown.push({ label: 'Fuera del área (+25%)', price: trasladoPrice });
+      }
     }
 
     return {
@@ -108,7 +112,7 @@ export default function Calculator() {
   const nonTrasladoExtras = currentService.extras;
   const SOCIAL_GLAM_ZONE_OPTIONS = [
     { id: 'asuncion', label: 'Asunción y alrededores' },
-    { id: 'outside', label: 'Fuera del área (+Gs. 400.000 + 25%)' },
+    { id: 'outside', label: 'Fuera del área (+25%)' },
   ];
 
   return (
