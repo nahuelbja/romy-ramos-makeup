@@ -45,37 +45,47 @@ export default function Hero() {
       style={{
         width: '100%',
         position: 'relative',
-        overflow: 'hidden',
         background: 'var(--ivoire)',
       }}
     >
-      {/* Background slideshow */}
-      <AnimatePresence initial={false}>
-        <motion.div
-          key={current}
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '-100%' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 0,
-          }}
-        >
-          <Image
-            src={HERO_IMAGES[current]}
-            alt="Romy Ramos Makeup"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center center' }}
-            priority={current === 0}
-            sizes="100vw"
-          />
-        </motion.div>
-      </AnimatePresence>
+      {/* Image container — clips slide transitions */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          zIndex: 0,
+        }}
+      >
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={current}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Image
+              src={HERO_IMAGES[current]}
+              alt="Romy Ramos Makeup"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center center' }}
+              priority={current === 0}
+              sizes="100vw"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* White overlay */}
       <div
@@ -90,12 +100,13 @@ export default function Hero() {
         }}
       />
 
-      {/* Content — positioned within first viewport */}
+      {/* Content — sticky, stays centered in viewport as user scrolls */}
       <div
         style={{
-          position: 'relative',
+          position: 'sticky',
+          top: 0,
           zIndex: 2,
-          minHeight: '100vh',
+          height: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
