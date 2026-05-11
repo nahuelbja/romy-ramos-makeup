@@ -10,7 +10,6 @@ const HERO_IMAGES = [
   '/IMG_0219.jpeg',
   '/IMG_0220.jpeg',
   '/IMG_0221.jpeg',
-  '/IMG_0222.png',
   '/IMG_0223.jpeg',
   '/IMG_0225.jpeg',
   '/IMG_0226.jpeg',
