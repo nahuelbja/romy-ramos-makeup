@@ -51,7 +51,7 @@ export default function About() {
             }}
           >
             <Image
-              src="/about.jpg"
+              src="/IMG_0222.png"
               alt="Romy Ramos — Maquilladora profesional"
               fill
               style={{ objectFit: 'cover', objectPosition: 'center top' }}

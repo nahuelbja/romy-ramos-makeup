@@ -6,13 +6,15 @@ import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 
 const HERO_IMAGES = [
-  '/hero-1.jpg',
-  '/hero-2.jpg',
-  '/hero-3.jpg',
-  '/hero-4.jpg',
-  '/hero-5.jpg',
-  '/hero-6.jpg',
-  '/hero-7.jpg',
+  '/IMG_0215.jpeg',
+  '/IMG_0218.jpeg',
+  '/IMG_0219.jpeg',
+  '/IMG_0220.jpeg',
+  '/IMG_0221.jpeg',
+  '/IMG_0222.png',
+  '/IMG_0223.jpeg',
+  '/IMG_0225.jpeg',
+  '/IMG_0226.jpeg',
 ];
 
 const INTERVAL_MS = 4500;
