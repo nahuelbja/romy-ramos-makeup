@@ -71,8 +71,10 @@ export default function Calculator() {
       trasladoPrice = 400000;
       extrasBreakdown.push({ label: 'Traslado — Asunción y alrededores', price: trasladoPrice });
     } else if (city === 'outside') {
-      trasladoPrice = Math.round(subtotalBase * 0.30);
-      extrasBreakdown.push({ label: 'Fuera de Asunción y alrededores (+30%)', price: trasladoPrice });
+      const fijo = 400000;
+      const porcentaje = Math.round(subtotalBase * 0.25);
+      trasladoPrice = fijo + porcentaje;
+      extrasBreakdown.push({ label: `Fuera del área — Gs. 400.000 + 25% (${formatGs(porcentaje)})`, price: trasladoPrice });
     }
 
     return {
@@ -106,7 +108,7 @@ export default function Calculator() {
   const nonTrasladoExtras = currentService.extras;
   const SOCIAL_GLAM_ZONE_OPTIONS = [
     { id: 'asuncion', label: 'Asunción y alrededores' },
-    { id: 'outside', label: 'Fuera del área (+30%)' },
+    { id: 'outside', label: 'Fuera del área (+Gs. 400.000 + 25%)' },
   ];
 
   return (
@@ -281,7 +283,7 @@ export default function Calculator() {
                 options={isNovia
                   ? TRASLADO_OPTIONS.map((o) => ({
                       id: o.id,
-                      label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+30%)',
+                      label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+Gs. 400.000 + 25%)',
                     }))
                   : SOCIAL_GLAM_ZONE_OPTIONS
                 }
