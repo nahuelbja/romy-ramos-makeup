@@ -16,7 +16,7 @@ const HERO_IMAGES = [
   '/IMG_0226.jpeg',
 ];
 
-const INTERVAL_MS = 4500;
+const INTERVAL_MS = 2000;
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
@@ -55,13 +55,13 @@ export default function Hero() {
       }}
     >
       {/* Background slideshow */}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         <motion.div
           key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: 'easeInOut' }}
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '-100%' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
             position: 'absolute',
             inset: 0,
