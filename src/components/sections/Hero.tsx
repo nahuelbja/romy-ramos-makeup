@@ -112,7 +112,7 @@ export default function Hero() {
               gap: '12px',
             }}
           >
-            Maquillaje Profesional · Paraguay
+            Maquillaje Profesional
             <span
               style={{
                 display: 'block',
