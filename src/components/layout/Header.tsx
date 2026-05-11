@@ -44,6 +44,7 @@ export default function Header() {
         }}
       >
         <div
+          className="header-inner"
           style={{
             maxWidth: '1400px',
             margin: '0 auto',
@@ -211,6 +212,14 @@ export default function Header() {
         @media (max-width: 968px) {
           .hidden-mobile { display: none !important; }
           .show-mobile { display: flex !important; }
+          .header-inner {
+            display: flex !important;
+            justify-content: space-between;
+            padding: 0 24px !important;
+          }
+          .header-inner a[aria-label] {
+            justify-self: unset;
+          }
         }
         @media (min-width: 969px) {
           .show-mobile { display: none !important; }

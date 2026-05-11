@@ -16,7 +16,7 @@ export default function Policies() {
     <section
       style={{
         background: 'var(--ivoire)',
-        padding: '100px 40px',
+        padding: '80px 40px 64px',
       }}
     >
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -110,6 +110,14 @@ export default function Policies() {
             </motion.div>
           ))}
         </div>
+
+        <div
+          style={{
+            marginTop: '56px',
+            height: '1px',
+            background: 'linear-gradient(to right, transparent, var(--champagne), transparent)',
+          }}
+        />
       </div>
     </section>
   );
