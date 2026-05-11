@@ -1,0 +1,330 @@
+'use client';
+
+import { useState, useMemo, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { SERVICES, TRASLADO_OPTIONS } from '@/lib/services';
+import { formatGs } from '@/lib/formatters';
+import { ServiceType, CityOption } from '@/types/calculator';
+import TypeSelector from '@/components/calculator/TypeSelector';
+import ExtraItem from '@/components/calculator/ExtraItem';
+import TotalBar from '@/components/calculator/TotalBar';
+import ToggleGroup from '@/components/calculator/ToggleGroup';
+
+export default function Calculator() {
+  const [serviceType, setServiceType] = useState<ServiceType>('social');
+  const [selectedExtras, setSelectedExtras] = useState<Set<string>>(new Set());
+  const [companionCount, setCompanionCount] = useState(1);
+  const [companionWithLashes, setCompanionWithLashes] = useState(false);
+  const [city, setCity] = useState<CityOption>('none');
+
+  const currentService = useMemo(
+    () => SERVICES.find((s) => s.id === serviceType)!,
+    [serviceType]
+  );
+
+  const handleTypeChange = useCallback((type: ServiceType) => {
+    setServiceType(type);
+    setSelectedExtras(new Set());
+    setCompanionCount(1);
+    setCompanionWithLashes(false);
+    setCity('none');
+  }, []);
+
+  const toggleExtra = useCallback((id: string) => {
+    setSelectedExtras((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const { total, extrasBreakdown } = useMemo(() => {
+    const base = currentService.base;
+    let extras = 0;
+    const extrasBreakdown: Array<{ label: string; price: number }> = [];
+
+    for (const extra of currentService.extras) {
+      if (!selectedExtras.has(extra.id)) continue;
+
+      if (extra.hasQuantity) {
+        const unitPrice = extra.price + (companionWithLashes && extra.hasToggle ? (extra.togglePrice ?? 0) : 0);
+        const totalPrice = unitPrice * companionCount;
+        extras += totalPrice;
+        extrasBreakdown.push({
+          label: `${extra.label} x${companionCount}${companionWithLashes ? ' + pestañas' : ''}`,
+          price: totalPrice,
+        });
+      } else {
+        extras += extra.price;
+        extrasBreakdown.push({ label: extra.label, price: extra.price });
+      }
+    }
+
+    const subtotalBase = base + extras;
+
+    let trasladoPrice = 0;
+    if (serviceType === 'novia') {
+      if (city === 'asuncion') {
+        trasladoPrice = 400000;
+        extrasBreakdown.push({ label: 'Traslado — Asunción y alrededores', price: trasladoPrice });
+      } else if (city === 'outside') {
+        trasladoPrice = Math.round(subtotalBase * 0.30);
+        extrasBreakdown.push({ label: 'Traslado — Fuera del área (+30%)', price: trasladoPrice });
+      }
+    }
+
+    return {
+      subtotal: subtotalBase,
+      total: subtotalBase + trasladoPrice,
+      extrasBreakdown,
+    };
+  }, [currentService, selectedExtras, companionCount, companionWithLashes, city, serviceType]);
+
+  const whatsappMessage = useMemo(() => {
+    const lines: string[] = [
+      `*Hola Romy!* Quiero reservar un servicio:\n`,
+      `*Tipo:* ${currentService.name}`,
+      `*Base:* ${formatGs(currentService.base)}\n`,
+      `*Adicionales:*`,
+    ];
+
+    if (extrasBreakdown.length === 0) {
+      lines.push('• Sin adicionales');
+    } else {
+      extrasBreakdown.forEach((e) => {
+        lines.push(`• ${e.label}: ${formatGs(e.price)}`);
+      });
+    }
+
+    lines.push(`\n*TOTAL ESTIMADO:* ${formatGs(total)}`);
+    return lines.join('\n');
+  }, [currentService, extrasBreakdown, total]);
+
+  const isNovia = serviceType === 'novia';
+  const nonTrasladoExtras = currentService.extras;
+
+  return (
+    <section
+      id="presupuesto"
+      style={{
+        background: 'var(--noir)',
+        padding: '120px 0',
+      }}
+    >
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 40px' }} className="calc-container">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+          style={{
+            textAlign: 'center',
+            marginBottom: '64px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '24px',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '11px',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.3em',
+              color: 'rgba(255,255,255,0.4)',
+              display: 'inline-flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            Calculadora
+            <span style={{ display: 'block', width: '40px', height: '1px', background: 'var(--champagne)' }} />
+          </span>
+          <h2
+            style={{
+              fontFamily: 'var(--font-playfair)',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.04em',
+              fontSize: 'clamp(36px, 5vw, 60px)',
+              color: 'var(--blanc)',
+              lineHeight: 1.05,
+            }}
+          >
+            Tu Presupuesto
+          </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-cormorant)',
+              fontStyle: 'italic',
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.5)',
+              maxWidth: '440px',
+            }}
+          >
+            Personalizá tu servicio y obtené un estimado al instante.
+          </p>
+        </motion.div>
+
+        {/* Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: 0.1 }}
+          style={{
+            border: '1px solid rgba(255,255,255,0.1)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Type selector */}
+          <div style={{ padding: '24px 24px 0' }}>
+            <TypeSelector
+              services={SERVICES}
+              selected={serviceType}
+              onChange={handleTypeChange}
+            />
+          </div>
+
+          {/* Base price display */}
+          <div
+            style={{
+              padding: '20px 40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+            }}
+            className="base-price-row"
+          >
+            <span
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '12px',
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.25em',
+                color: 'rgba(255,255,255,0.5)',
+              }}
+            >
+              Precio base — {currentService.name}
+            </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-playfair)',
+                fontWeight: 500,
+                fontSize: '18px',
+                color: 'var(--blanc)',
+              }}
+            >
+              {formatGs(currentService.base)}
+            </span>
+          </div>
+
+          {/* Extras list */}
+          <div style={{ padding: '8px 40px 24px' }} className="extras-section">
+            <div
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '11px',
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.3em',
+                color: 'rgba(255,255,255,0.35)',
+                padding: '20px 0 12px',
+              }}
+            >
+              Adicionales
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {nonTrasladoExtras.map((extra) => (
+                <ExtraItem
+                  key={`${serviceType}-${extra.id}`}
+                  extra={extra}
+                  checked={selectedExtras.has(extra.id)}
+                  onToggle={toggleExtra}
+                  quantity={companionCount}
+                  onQuantityChange={setCompanionCount}
+                  withLashes={companionWithLashes}
+                  onLashesToggle={setCompanionWithLashes}
+                />
+              ))}
+            </div>
+
+            {/* Traslado — only for novia */}
+            {isNovia && (
+              <div style={{ paddingTop: '20px' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '11px',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.3em',
+                    color: 'rgba(255,255,255,0.35)',
+                    paddingBottom: '16px',
+                  }}
+                >
+                  Traslado a domicilio
+                </div>
+                <ToggleGroup
+                  options={TRASLADO_OPTIONS.map((o) => ({
+                    id: o.id,
+                    label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+30%)',
+                  }))}
+                  selected={city}
+                  onChange={(v) => setCity(v as CityOption)}
+                  ariaLabel="Seleccionar zona de traslado"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Total bar */}
+          <TotalBar
+            total={total}
+            whatsappMessage={whatsappMessage}
+            isSticky={false}
+          />
+        </motion.div>
+
+        {/* Footer note */}
+        <div style={{ textAlign: 'center', marginTop: '32px' }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-cormorant)',
+              fontStyle: 'italic',
+              fontSize: '15px',
+              color: 'rgba(255,255,255,0.35)',
+            }}
+          >
+            Los valores con &ldquo;desde&rdquo; pueden ajustarse al confirmar el servicio por WhatsApp
+          </p>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          .calc-container {
+            padding: 0 16px !important;
+          }
+          .base-price-row {
+            padding: 16px 20px !important;
+          }
+          .extras-section {
+            padding: 8px 20px 20px !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}

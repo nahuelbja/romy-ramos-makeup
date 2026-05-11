@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --noir: #0A0A0A;
+  --blanc: #FFFFFF;
+  --ivoire: #FAFAFA;
+  --cendre: #8A8580;
+  --champagne: #B8A378;
+  --light-grey: #E8E6E3;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--blanc);
+  color: var(--noir);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.section-label {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--cendre);
+}
+
+.section-label::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background-color: var(--champagne);
+}
+
+.accent-line {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background-color: var(--champagne);
+}
+
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--light-grey);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  border-radius: 0;
+}
+
+@media (max-width: 640px) {
+  .custom-checkbox {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.custom-checkbox:checked {
+  background-color: var(--champagne);
+  border-color: var(--champagne);
+}
+
+.custom-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%) rotate(45deg);
+  width: 5px;
+  height: 9px;
+  border-right: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+}
+
+button,
+[role="button"],
+input[type="checkbox"] {
+  -webkit-tap-highlight-color: rgba(184, 163, 120, 0.15);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivoire);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--light-grey);
+  border-radius: 2px;
+}
