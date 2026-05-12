@@ -22,7 +22,7 @@ export default function ToggleGroup({ options, selected, onChange, ariaLabel }: 
             type="button"
             role="radio"
             aria-checked={isActive}
-            onClick={() => onChange(opt.id)}
+            onClick={() => onChange(isActive ? 'none' : opt.id)}
             style={{
               padding: '8px 20px',
               background: isActive ? 'var(--champagne)' : 'rgba(255,255,255,0.08)',
