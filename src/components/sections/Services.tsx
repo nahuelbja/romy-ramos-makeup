@@ -7,25 +7,22 @@ import { formatGs } from '@/lib/formatters';
 
 const featuresMap: Record<string, string[]> = {
   social: [
-    'Piel preparada y corregida',
-    'Delineado de ojos',
-    'Labios definidos',
-    'Larga duración (8+ horas)',
-    'Asesoramiento de color',
+    'Maquillaje natural',
+    'Tonos neutros',
+    'Maquillaje con pestañas',
+    'Acabado fresco, sin mucha intensidad en los ojos',
   ],
   glam: [
-    'Todo lo del Social',
-    'Contouring y highlight',
-    'Ojos ahumados o intensos',
-    'Aplicación profesional',
-    'Acabado fotogénico',
+    'Maquillaje completo con pestañas',
+    'Brillo opcional',
+    'Mayor intensidad y marcación en la mirada',
   ],
   novia: [
-    'Consulta previa personalizada',
-    'Maquillaje larga duración',
-    'Waterproof certificado',
-    'Look romántico o editorial',
-    'Coordinación con peinado',
+    'Facial básico previo al maquillaje',
+    'Diseño de piel personalizado (piel seca, oleosa o madura)',
+    'Productos profesionales de larga duración',
+    'Aplicación de pestañas postizas (opcional, sin costo adicional)',
+    'Bata de novia durante todo el procedimiento',
   ],
 };
 
@@ -119,7 +116,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
       >
         {service.id === 'social' && 'Ideal para eventos, reuniones y celebraciones. Un maquillaje pulido y elegante que dura todo el día.'}
         {service.id === 'glam' && 'Para las noches que merecen ser recordadas. Intensidad, definición y una presencia que no pasa desapercibida.'}
-        {service.id === 'novia' && 'Tu día más especial merece el mejor maquillaje. Coordinación completa y acompañamiento disponible.'}
+        {service.id === 'novia' && 'Una experiencia completa pensada para vos. Desde la preparación de la piel hasta el último detalle, todo para que te sientas única.'}
       </p>
 
       {/* Features */}
