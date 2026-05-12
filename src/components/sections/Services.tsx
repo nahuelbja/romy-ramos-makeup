@@ -119,7 +119,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
       >
         {service.id === 'social' && 'Ideal para eventos, reuniones y celebraciones. Un maquillaje pulido y elegante que dura todo el día.'}
         {service.id === 'glam' && 'Para las noches que merecen ser recordadas. Intensidad, definición y una presencia que no pasa desapercibida.'}
-        {service.id === 'novia' && 'Tu día más especial merece el mejor maquillaje. Coordinación completa, prueba incluida y acompañamiento disponible.'}
+        {service.id === 'novia' && 'Tu día más especial merece el mejor maquillaje. Coordinación completa y acompañamiento disponible.'}
       </p>
 
       {/* Features */}
