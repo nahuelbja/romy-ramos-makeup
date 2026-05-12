@@ -281,9 +281,9 @@ export default function Calculator() {
               </div>
               <ToggleGroup
                 options={isNovia
-                  ? TRASLADO_OPTIONS.map((o) => ({
+                  ? TRASLADO_OPTIONS.filter((o) => o.id !== 'none').map((o) => ({
                       id: o.id,
-                      label: o.id === 'none' ? 'Sin traslado' : o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+Gs. 400.000 + 25%)',
+                      label: o.id === 'asuncion' ? 'Asunción (+Gs. 400.000)' : 'Fuera del área (+Gs. 400.000 + 25%)',
                     }))
                   : SOCIAL_GLAM_ZONE_OPTIONS
                 }
