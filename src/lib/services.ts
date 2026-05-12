@@ -18,11 +18,6 @@ export const SERVICES: Service[] = [
         note: 'desde Gs. 150.000, ajuste por WhatsApp',
         price: 150000,
       },
-      {
-        id: 'domicilio',
-        label: 'Maquillaje a domicilio',
-        price: 100000,
-      },
     ],
   },
   {
@@ -41,11 +36,6 @@ export const SERVICES: Service[] = [
         label: 'Peinado',
         note: 'desde Gs. 150.000, ajuste por WhatsApp',
         price: 150000,
-      },
-      {
-        id: 'domicilio',
-        label: 'Maquillaje a domicilio',
-        price: 100000,
       },
     ],
   },
