@@ -48,12 +48,19 @@ export const SERVICES: Service[] = [
       },
       {
         id: 'acompanantes',
-        label: 'Acompañantes (mamá / madrina / damas)',
+        label: 'Maquillajes para acompañantes',
         price: 300000,
         hasQuantity: true,
         hasToggle: true,
         toggleLabel: '+ pestañas',
         togglePrice: 50000,
+      },
+      {
+        id: 'peinado_acompanantes',
+        label: 'Peinado para acompañantes',
+        note: 'ajuste por WhatsApp',
+        price: 150000,
+        hasQuantity: true,
       },
       {
         id: 'acompanamiento',
