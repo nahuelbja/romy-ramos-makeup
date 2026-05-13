@@ -58,8 +58,8 @@ export const SERVICES: Service[] = [
       {
         id: 'peinado_acompanantes',
         label: 'Peinado para acompañantes',
-        note: 'ajuste por WhatsApp',
-        price: 150000,
+        note: 'desde Gs. 250.000, ajuste por WhatsApp',
+        price: 250000,
         hasQuantity: true,
       },
       {
