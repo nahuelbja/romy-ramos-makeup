@@ -8,11 +8,6 @@ export const SERVICES: Service[] = [
     base: 280000,
     extras: [
       {
-        id: 'pestanas',
-        label: 'Aplicación de pestañas',
-        price: 50000,
-      },
-      {
         id: 'peinado',
         label: 'Peinado',
         note: 'desde Gs. 150.000, ajuste por WhatsApp',
@@ -26,11 +21,6 @@ export const SERVICES: Service[] = [
     name: 'Glam',
     base: 330000,
     extras: [
-      {
-        id: 'pestanas',
-        label: 'Aplicación de pestañas',
-        price: 50000,
-      },
       {
         id: 'peinado',
         label: 'Peinado',
