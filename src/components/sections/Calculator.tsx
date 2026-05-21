@@ -84,12 +84,12 @@ export default function Calculator() {
     };
   }, [currentService, selectedExtras, companionCount, companionWithLashes, city, serviceType]);
 
-  const whatsappMessage = useMemo(() => {
+  const calNotes = useMemo(() => {
     const lines: string[] = [
-      `*Hola Romy!* Quiero reservar un servicio:\n`,
-      `*Tipo:* ${currentService.name}`,
-      `*Base:* ${formatGs(currentService.base)}\n`,
-      `*Adicionales:*`,
+      `Servicio: ${currentService.name}`,
+      `Base: ${formatGs(currentService.base)}`,
+      '',
+      'Adicionales:',
     ];
 
     if (extrasBreakdown.length === 0) {
@@ -100,7 +100,8 @@ export default function Calculator() {
       });
     }
 
-    lines.push(`\n*TOTAL ESTIMADO:* ${formatGs(total)}`);
+    lines.push('');
+    lines.push(`Total estimado: ${formatGs(total)}`);
     return lines.join('\n');
   }, [currentService, extrasBreakdown, total]);
 
@@ -297,7 +298,7 @@ export default function Calculator() {
           {/* Total bar */}
           <TotalBar
             total={total}
-            whatsappMessage={whatsappMessage}
+            calNotes={calNotes}
             isSticky={false}
           />
         </motion.div>
