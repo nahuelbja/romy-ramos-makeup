@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { formatGs } from '@/lib/formatters';
 
 const CAL_USERNAME = 'romyramos.makeup';
@@ -15,24 +15,23 @@ interface TotalBarProps {
 export default function TotalBar({ total, calNotes, isSticky }: TotalBarProps) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const existingScript = document.getElementById('cal-embed-script');
-    if (existingScript) return;
+    if (document.getElementById('cal-embed-script')) return;
+
     const script = document.createElement('script');
     script.id = 'cal-embed-script';
     script.src = 'https://app.cal.com/embed/embed.js';
     script.async = true;
+    script.onload = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cal = (window as any).Cal;
+      if (!cal) return;
+      cal('init', { origin: 'https://cal.com' });
+      cal('ui', { theme: 'light', hideEventTypeDetails: false, layout: 'month_view' });
+    };
     document.head.appendChild(script);
   }, []);
 
-  const handleReservar = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cal = (window as any).Cal;
-    if (!cal) return;
-    cal('modal', {
-      calLink: `${CAL_USERNAME}/${CAL_EVENT}`,
-      config: { layout: 'month_view', theme: 'light', notes: calNotes },
-    });
-  }, [calNotes]);
+  const calLink = `${CAL_USERNAME}/${CAL_EVENT}?notes=${encodeURIComponent(calNotes)}`;
 
   return (
     <div
@@ -82,9 +81,10 @@ export default function TotalBar({ total, calNotes, isSticky }: TotalBarProps) {
         </span>
       </div>
 
-      {/* Cal.com CTA */}
+      {/* Cal.com CTA — data-cal-link is processed automatically by the embed script */}
       <button
-        onClick={handleReservar}
+        data-cal-link={calLink}
+        data-cal-config='{"layout":"month_view","theme":"light"}'
         aria-label="Elegir fecha y hora para reservar turno"
         style={{
           display: 'inline-flex',
