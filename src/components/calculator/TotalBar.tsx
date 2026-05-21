@@ -1,11 +1,9 @@
 'use client';
 
-import Script from 'next/script';
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { formatGs } from '@/lib/formatters';
 
-const CAL_USERNAME = 'romyramos.makeup';
-const CAL_EVENT = 'reserva-de-turno-maquillaje';
+const CAL_URL = 'https://cal.com/romyramos.makeup/reserva-de-turno-maquillaje';
 
 interface TotalBarProps {
   total: number;
@@ -13,66 +11,82 @@ interface TotalBarProps {
   isSticky?: boolean;
 }
 
+function CalModal({ url, onClose }: { url: string; onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        background: 'rgba(0,0,0,0.75)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '100%',
+          maxWidth: '820px',
+          height: '85vh',
+          background: '#fff',
+          position: 'relative',
+          borderRadius: '2px',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Cerrar"
+          style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            zIndex: 1,
+            width: '32px',
+            height: '32px',
+            background: 'var(--noir)',
+            color: 'var(--blanc)',
+            border: 'none',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '16px',
+            lineHeight: 1,
+          }}
+        >
+          ×
+        </button>
+        <iframe
+          src={url}
+          style={{ width: '100%', height: '100%', border: 'none' }}
+          title="Reservar turno — Romy Ramos Makeup"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function TotalBar({ total, calNotes, isSticky }: TotalBarProps) {
-  const calLink = `${CAL_USERNAME}/${CAL_EVENT}`;
+  const [showModal, setShowModal] = useState(false);
+
+  const calUrlWithNotes = `${CAL_URL}?notes=${encodeURIComponent(calNotes)}`;
 
   const handleClick = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cal = (window as any).Cal;
-    if (cal) {
-      cal('modal', {
-        calLink,
-        config: {
-          layout: 'month_view',
-          theme: 'light',
-          notes: calNotes,
-        },
-      });
-    } else {
-      // fallback si el script aún no cargó
-      window.open(`https://cal.com/${calLink}`, '_blank');
-    }
-  }, [calLink, calNotes]);
+    setShowModal(true);
+  }, []);
 
   return (
     <>
-      <Script
-        id="cal-embed-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function (C, A, L) {
-              let p = function (a, ar) { a.q.push(ar); };
-              let d = C.document;
-              C.Cal = C.Cal || function () {
-                let cal = C.Cal;
-                let ar = arguments;
-                if (!cal.loaded) {
-                  cal.ns = {};
-                  cal.q = cal.q || [];
-                  d.head.appendChild(d.createElement("script")).src = A;
-                  cal.loaded = true;
-                }
-                if (ar[0] === L) {
-                  const api = function () { p(api, arguments); };
-                  const namespace = ar[1];
-                  api.q = api.q || [];
-                  if (typeof namespace === "string") {
-                    cal.ns[namespace] = cal.ns[namespace] || api;
-                    p(cal.ns[namespace], ar);
-                    return;
-                  }
-                  p(cal, ar);
-                  return;
-                }
-                p(cal, ar);
-              };
-            })(window, "https://app.cal.com/embed/embed.js", "init");
-            Cal("init", { origin: "https://cal.com" });
-            Cal("ui", { theme: "light", hideEventTypeDetails: false, layout: "month_view" });
-          `,
-        }}
-      />
+      {showModal && (
+        <CalModal url={calUrlWithNotes} onClose={() => setShowModal(false)} />
+      )}
 
       <div
         style={{
