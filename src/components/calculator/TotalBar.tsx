@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { formatGs } from '@/lib/formatters';
 
-const CAL_URL = 'https://cal.com/romyramos.makeup/reserva-de-turno-maquillaje';
+const CAL_URL = 'https://cal.com/romina-ramos-i0ezj1/reserva-de-turno-maquillaje';
 
 interface TotalBarProps {
   total: number;
