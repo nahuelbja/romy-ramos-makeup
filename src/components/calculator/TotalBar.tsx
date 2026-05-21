@@ -23,7 +23,7 @@ function loadCalEmbed(): Promise<void> {
   return new Promise((resolve) => {
     if (window.Cal) { resolve(); return; }
     // Cal.com inline embed loader
-    (function (C: Window, A: string, L: string) {
+    (function (C: Window, A: string) {
       const p = function (...args: unknown[]) { p.q.push(args); };
       (p as unknown as { q: unknown[] }).q = [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +33,7 @@ function loadCalEmbed(): Promise<void> {
       s.async = true;
       s.onload = () => resolve();
       document.head.appendChild(s);
-    })(window, 'Cal', 'https://app.cal.com/embed/embed.js');
+    })(window, 'Cal');
   });
 }
 
