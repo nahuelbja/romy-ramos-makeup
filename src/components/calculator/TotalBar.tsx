@@ -6,59 +6,31 @@ import { formatGs } from '@/lib/formatters';
 const CAL_USERNAME = 'romyramos.makeup';
 const CAL_EVENT = 'reserva-de-turno-maquillaje';
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Cal?: any;
-  }
-}
-
 interface TotalBarProps {
   total: number;
   calNotes: string;
   isSticky?: boolean;
 }
 
-function loadCalEmbed(): Promise<void> {
-  return new Promise((resolve) => {
-    if (window.Cal) { resolve(); return; }
-    // Cal.com inline embed loader
-    (function (C: Window, A: string) {
-      const p = function (...args: unknown[]) { p.q.push(args); };
-      (p as unknown as { q: unknown[] }).q = [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (C as any)[A] = p;
-      const s = document.createElement('script');
-      s.src = 'https://app.cal.com/embed/embed.js';
-      s.async = true;
-      s.onload = () => resolve();
-      document.head.appendChild(s);
-    })(window, 'Cal');
-  });
-}
-
 export default function TotalBar({ total, calNotes, isSticky }: TotalBarProps) {
   useEffect(() => {
-    loadCalEmbed().then(() => {
-      if (!window.Cal) return;
-      window.Cal('init', { origin: 'https://cal.com' });
-      window.Cal('ui', {
-        theme: 'light',
-        hideEventTypeDetails: false,
-        layout: 'month_view',
-      });
-    });
+    if (typeof window === 'undefined') return;
+    const existingScript = document.getElementById('cal-embed-script');
+    if (existingScript) return;
+    const script = document.createElement('script');
+    script.id = 'cal-embed-script';
+    script.src = 'https://app.cal.com/embed/embed.js';
+    script.async = true;
+    document.head.appendChild(script);
   }, []);
 
   const handleReservar = useCallback(() => {
-    if (!window.Cal) return;
-    window.Cal('modal', {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cal = (window as any).Cal;
+    if (!cal) return;
+    cal('modal', {
       calLink: `${CAL_USERNAME}/${CAL_EVENT}`,
-      config: {
-        layout: 'month_view',
-        theme: 'light',
-        notes: calNotes,
-      },
+      config: { layout: 'month_view', theme: 'light', notes: calNotes },
     });
   }, [calNotes]);
 
