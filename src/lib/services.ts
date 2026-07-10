@@ -10,8 +10,8 @@ export const SERVICES: Service[] = [
       {
         id: 'peinado',
         label: 'Peinado',
-        note: 'desde Gs. 150.000, ajuste por WhatsApp',
-        price: 150000,
+        note: 'desde Gs. 300.000, ajuste por WhatsApp',
+        price: 300000,
       },
     ],
   },
@@ -24,8 +24,8 @@ export const SERVICES: Service[] = [
       {
         id: 'peinado',
         label: 'Peinado',
-        note: 'desde Gs. 150.000, ajuste por WhatsApp',
-        price: 150000,
+        note: 'desde Gs. 300.000, ajuste por WhatsApp',
+        price: 300000,
       },
     ],
   },
@@ -43,8 +43,8 @@ export const SERVICES: Service[] = [
       {
         id: 'prueba_peinado',
         label: 'Prueba de peinado',
-        note: 'desde Gs. 300.000, ajuste por WhatsApp',
-        price: 300000,
+        note: 'desde Gs. 400.000, ajuste por WhatsApp',
+        price: 400000,
       },
       {
         id: 'acompanantes',
@@ -56,10 +56,15 @@ export const SERVICES: Service[] = [
         togglePrice: 50000,
       },
       {
+        id: 'peinado_novia',
+        label: 'Peinado de novia',
+        price: 700000,
+      },
+      {
         id: 'peinado_acompanantes',
         label: 'Peinado para acompañantes',
-        note: 'desde Gs. 250.000, ajuste por WhatsApp',
-        price: 250000,
+        note: 'desde Gs. 300.000, ajuste por WhatsApp',
+        price: 300000,
         hasQuantity: true,
       },
       {
