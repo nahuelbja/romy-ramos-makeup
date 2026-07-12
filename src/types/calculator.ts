@@ -11,12 +11,19 @@ export interface ExtraOption {
   togglePrice?: number;
 }
 
+export interface IncludedItem {
+  label: string;
+  price: number;
+  description: string;
+}
+
 export interface Service {
   id: ServiceType;
   number: string;
   name: string;
   base: number;
   extras: ExtraOption[];
+  included?: IncludedItem;
 }
 
 export type CityOption = 'none' | 'asuncion' | 'outside';

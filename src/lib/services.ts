@@ -34,6 +34,12 @@ export const SERVICES: Service[] = [
     number: '03',
     name: 'Novia',
     base: 850000,
+    included: {
+      label: 'Spot de maquillaje',
+      price: 500000,
+      description:
+        'Incluye silla profesional de maquillaje, luces, bata de novia y todas las comodidades para tu gran día.',
+    },
     extras: [
       {
         id: 'prueba_maquillaje',

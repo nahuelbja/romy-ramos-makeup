@@ -43,7 +43,8 @@ export default function Calculator() {
   }, []);
 
   const { total, extrasBreakdown } = useMemo(() => {
-    const base = currentService.base;
+    const includedPrice = currentService.included?.price ?? 0;
+    const base = currentService.base + includedPrice;
     let extras = 0;
     const extrasBreakdown: Array<{ label: string; price: number }> = [];
 
@@ -85,12 +86,16 @@ export default function Calculator() {
   }, [currentService, selectedExtras, companionCount, companionWithLashes, city, serviceType]);
 
   const calNotes = useMemo(() => {
-    const lines: string[] = [
-      `Servicio: ${currentService.name}`,
-      `Base: ${formatGs(currentService.base)}`,
-      '',
-      'Adicionales:',
-    ];
+    const lines: string[] = [`Servicio: ${currentService.name}`];
+
+    if (currentService.included) {
+      lines.push(`Maquillaje: ${formatGs(currentService.base)}`);
+      lines.push(`${currentService.included.label}: ${formatGs(currentService.included.price)}`);
+    } else {
+      lines.push(`Base: ${formatGs(currentService.base)}`);
+    }
+
+    lines.push('', 'Adicionales:');
 
     if (extrasBreakdown.length === 0) {
       lines.push('• Sin adicionales');
@@ -206,7 +211,7 @@ export default function Calculator() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
+              borderBottom: currentService.included ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(255,255,255,0.08)',
             }}
             className="base-price-row"
           >
@@ -220,7 +225,7 @@ export default function Calculator() {
                 color: 'rgba(255,255,255,0.5)',
               }}
             >
-              Precio base — {currentService.name}
+              {currentService.included ? `Maquillaje — ${currentService.name}` : `Precio base — ${currentService.name}`}
             </span>
             <span
               style={{
@@ -233,6 +238,86 @@ export default function Calculator() {
               {formatGs(currentService.base)}
             </span>
           </div>
+
+          {/* Included spot (always part of the package) */}
+          {currentService.included && (
+            <div
+              style={{
+                padding: '20px 40px',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
+              }}
+              className="spot-row"
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '16px',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.25em',
+                      color: 'rgba(255,255,255,0.5)',
+                    }}
+                  >
+                    {currentService.included.label}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '9px',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.2em',
+                      color: 'var(--champagne)',
+                      border: '1px solid var(--champagne)',
+                      padding: '3px 8px',
+                    }}
+                  >
+                    Incluido
+                  </span>
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-playfair)',
+                    fontWeight: 500,
+                    fontSize: '18px',
+                    color: 'var(--blanc)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {formatGs(currentService.included.price)}
+                </span>
+              </div>
+              <p
+                style={{
+                  fontFamily: 'var(--font-cormorant)',
+                  fontStyle: 'italic',
+                  fontSize: '15px',
+                  lineHeight: 1.5,
+                  color: 'rgba(255,255,255,0.45)',
+                  marginTop: '10px',
+                  maxWidth: '520px',
+                }}
+              >
+                {currentService.included.description}
+              </p>
+            </div>
+          )}
 
           {/* Extras list */}
           <div style={{ padding: '8px 40px 24px' }} className="extras-section">
@@ -324,6 +409,9 @@ export default function Calculator() {
             padding: 0 16px !important;
           }
           .base-price-row {
+            padding: 16px 20px !important;
+          }
+          .spot-row {
             padding: 16px 20px !important;
           }
           .extras-section {
