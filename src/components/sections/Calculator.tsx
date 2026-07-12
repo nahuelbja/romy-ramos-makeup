@@ -89,8 +89,8 @@ export default function Calculator() {
     const lines: string[] = [`Servicio: ${currentService.name}`];
 
     if (currentService.included) {
-      lines.push(`Maquillaje: ${formatGs(currentService.base)}`);
-      lines.push(`${currentService.included.label}: ${formatGs(currentService.included.price)}`);
+      lines.push(`Base: ${formatGs(currentService.base + currentService.included.price)}`);
+      lines.push(`(Incluye ${currentService.included.label} sin cargo)`);
     } else {
       lines.push(`Base: ${formatGs(currentService.base)}`);
     }
@@ -225,7 +225,7 @@ export default function Calculator() {
                 color: 'rgba(255,255,255,0.5)',
               }}
             >
-              {currentService.included ? `Maquillaje — ${currentService.name}` : `Precio base — ${currentService.name}`}
+              Precio base — {currentService.name}
             </span>
             <span
               style={{
@@ -235,7 +235,7 @@ export default function Calculator() {
                 color: 'var(--blanc)',
               }}
             >
-              {formatGs(currentService.base)}
+              {formatGs(currentService.base + (currentService.included?.price ?? 0))}
             </span>
           </div>
 
@@ -252,55 +252,35 @@ export default function Calculator() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '16px',
+                  gap: '12px',
+                  flexWrap: 'wrap',
                 }}
               >
                 <span
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    flexWrap: 'wrap',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.25em',
+                    color: 'rgba(255,255,255,0.5)',
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: '12px',
-                      fontWeight: 500,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.25em',
-                      color: 'rgba(255,255,255,0.5)',
-                    }}
-                  >
-                    {currentService.included.label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: '9px',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.2em',
-                      color: 'var(--champagne)',
-                      border: '1px solid var(--champagne)',
-                      padding: '3px 8px',
-                    }}
-                  >
-                    Incluido
-                  </span>
+                  {currentService.included.label}
                 </span>
                 <span
                   style={{
-                    fontFamily: 'var(--font-playfair)',
-                    fontWeight: 500,
-                    fontSize: '18px',
-                    color: 'var(--blanc)',
-                    whiteSpace: 'nowrap',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '9px',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.2em',
+                    color: 'var(--champagne)',
+                    border: '1px solid var(--champagne)',
+                    padding: '3px 8px',
                   }}
                 >
-                  {formatGs(currentService.included.price)}
+                  Incluido sin cargo
                 </span>
               </div>
               <p
