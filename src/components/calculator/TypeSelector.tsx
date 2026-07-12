@@ -25,13 +25,14 @@ export default function TypeSelector({ services, selected, onChange }: TypeSelec
     >
       {services.map((service) => {
         const isActive = selected === service.id;
+        const fromPrice = service.base + (service.included?.price ?? 0);
         return (
           <button
             key={service.id}
             type="button"
             role="button"
             aria-pressed={isActive}
-            aria-label={`Seleccionar servicio ${service.name} desde ${formatGs(service.base)}`}
+            aria-label={`Seleccionar servicio ${service.name} desde ${formatGs(fromPrice)}`}
             onClick={() => onChange(service.id)}
             style={{
               display: 'flex',
@@ -90,7 +91,7 @@ export default function TypeSelector({ services, selected, onChange }: TypeSelec
                 letterSpacing: '0.05em',
               }}
             >
-              desde {formatGs(service.base)}
+              desde {formatGs(fromPrice)}
             </span>
           </button>
         );

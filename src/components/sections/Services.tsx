@@ -99,7 +99,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
           color: 'var(--noir)',
         }}
       >
-        {formatGs(service.base)}
+        {formatGs(service.base + (service.included?.price ?? 0))}
       </div>
 
       {/* Champagne line */}
