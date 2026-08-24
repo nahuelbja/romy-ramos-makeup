@@ -10,6 +10,10 @@ import ExtraItem from '@/components/calculator/ExtraItem';
 import TotalBar from '@/components/calculator/TotalBar';
 import ToggleGroup from '@/components/calculator/ToggleGroup';
 
+// El presupuesto general muestra solo los servicios casuales.
+// Novia tiene su propia página dedicada en /novias.
+const GENERAL_SERVICES = SERVICES.filter((s) => s.id !== 'novia');
+
 export default function Calculator({
   lockedService,
   hideSectionHeader = false,
@@ -207,7 +211,7 @@ export default function Calculator({
           {!lockedService && (
           <div style={{ padding: '24px 24px 0' }}>
             <TypeSelector
-              services={SERVICES}
+              services={GENERAL_SERVICES}
               selected={serviceType}
               onChange={handleTypeChange}
             />

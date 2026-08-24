@@ -140,9 +140,9 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
         ))}
       </ul>
 
-      {/* CTA */}
+      {/* CTA — Novia lleva a su página dedicada */}
       <a
-        href="#presupuesto"
+        href={service.id === 'novia' ? '/novias' : '#presupuesto'}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -160,7 +160,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
         onMouseEnter={(e) => ((e.currentTarget).style.color = 'var(--champagne)')}
         onMouseLeave={(e) => ((e.currentTarget).style.color = 'var(--noir)')}
       >
-        Calcular →
+        {service.id === 'novia' ? 'Ver más →' : 'Calcular →'}
       </a>
     </motion.div>
   );
