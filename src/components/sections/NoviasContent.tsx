@@ -1,15 +1,26 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { getService } from '@/lib/services';
 import { formatGs } from '@/lib/formatters';
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-// Foto de portada de la página de novias
-export const NOVIA_HERO = '/novia-6.jpg';
+// Intervalo del carrusel de portada (igual que la portada de inicio)
+const INTERVAL_MS = 2000;
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease, delay },
+  }),
+};
 
 // Galería "Mis Novias" — para agregar o cambiar fotos,
 // subilas a /public y editá esta lista.
@@ -59,97 +70,191 @@ export default function NoviasContent() {
   const novia = getService('novia')!;
   const desde = novia.base + (novia.included?.price ?? 0);
 
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % NOVIA_GALLERY.length);
+    }, INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
-      {/* ===== HERO NOVIA ===== */}
+      {/* ===== HERO NOVIA — mismo comportamiento que la portada de inicio ===== */}
       <section
+        className="novia-hero-section"
         style={{
+          width: '100%',
           position: 'relative',
-          minHeight: '92vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'var(--noir)',
-          overflow: 'hidden',
+          background: 'var(--ivoire)',
         }}
       >
-        <Image
-          src={NOVIA_HERO}
-          alt="Novia maquillada por Romy Ramos"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
-        />
+        {/* Contenedor de imágenes — recorta la transición entre fotos */}
         <div
           style={{
             position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 100%)',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+            zIndex: 0,
+          }}
+        >
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={current}
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <Image
+                src={NOVIA_GALLERY[current]}
+                alt="Novia maquillada por Romy Ramos"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center center' }}
+                priority={current === 0}
+                sizes="100vw"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Velo blanco */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(255, 255, 255, 0.78)',
+            zIndex: 1,
           }}
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease }}
+        {/* Contenido — sticky, queda centrado mientras se scrollea la foto */}
+        <div
           style={{
-            position: 'relative',
-            zIndex: 1,
-            textAlign: 'center',
-            padding: '140px 24px 100px',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            height: '100vh',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '28px',
+            justifyContent: 'center',
+            padding: '120px 40px 100px',
+            textAlign: 'center',
           }}
         >
-          <span
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '11px',
-              fontWeight: 500,
-              textTransform: 'uppercase',
-              letterSpacing: '0.3em',
-              color: 'rgba(255,255,255,0.65)',
-              display: 'inline-flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '12px',
-            }}
+          {/* Label */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={0}
+            variants={fadeUp}
+            style={{ marginBottom: '48px' }}
           >
-            Experiencia Novia
-            <span style={{ display: 'block', width: '40px', height: '1px', background: 'var(--champagne)' }} />
-          </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '11px',
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.3em',
+                color: 'var(--cendre)',
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '12px',
+              }}
+            >
+              Experiencia Novia
+              <span
+                style={{
+                  display: 'block',
+                  width: '40px',
+                  height: '1px',
+                  background: 'var(--champagne)',
+                }}
+              />
+            </span>
+          </motion.div>
 
-          <h1
+          {/* H1 */}
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            custom={0.15}
+            variants={fadeUp}
             style={{
               fontFamily: 'var(--font-playfair)',
               fontWeight: 500,
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
-              fontSize: 'clamp(44px, 9vw, 120px)',
-              lineHeight: 0.95,
-              color: 'var(--blanc)',
+              fontSize: 'clamp(60px, 10vw, 160px)',
+              lineHeight: 0.9,
+              color: 'var(--noir)',
+              marginBottom: '8px',
             }}
           >
-            Tu Día
-          </h1>
+            TU DÍA
+          </motion.h1>
 
-          <p
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={0.25}
+            variants={fadeUp}
+            style={{
+              fontFamily: 'var(--font-playfair)',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.6em',
+              fontSize: 'clamp(18px, 3vw, 36px)',
+              color: 'var(--noir)',
+              marginBottom: '48px',
+            }}
+          >
+            NOVIAS
+          </motion.div>
+
+          {/* Tagline */}
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            custom={0.4}
+            variants={fadeUp}
             style={{
               fontFamily: 'var(--font-cormorant)',
               fontStyle: 'italic',
-              fontSize: 'clamp(18px, 2.4vw, 24px)',
-              color: 'rgba(255,255,255,0.8)',
-              maxWidth: '540px',
+              fontWeight: 400,
+              fontSize: '20px',
+              color: 'var(--cendre)',
+              maxWidth: '480px',
               lineHeight: 1.6,
+              marginBottom: '56px',
             }}
           >
             Una experiencia pensada solo para vos. Desde la primera prueba hasta el último retoque.
-          </p>
+          </motion.p>
 
-          <div
+          {/* CTAs */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={0.55}
+            variants={fadeUp}
             style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}
             className="novia-cta-group"
           >
@@ -159,10 +264,10 @@ export default function NoviasContent() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'var(--champagne)',
-                color: 'var(--noir)',
-                border: '1px solid var(--champagne)',
-                padding: '18px 44px',
+                background: 'var(--noir)',
+                color: 'var(--blanc)',
+                border: '1px solid var(--noir)',
+                padding: '18px 48px',
                 fontFamily: 'var(--font-inter)',
                 fontSize: '11px',
                 fontWeight: 500,
@@ -170,6 +275,16 @@ export default function NoviasContent() {
                 letterSpacing: '0.3em',
                 textDecoration: 'none',
                 transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = 'transparent';
+                el.style.color = 'var(--noir)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = 'var(--noir)';
+                el.style.color = 'var(--blanc)';
               }}
             >
               Ver Precios
@@ -182,9 +297,9 @@ export default function NoviasContent() {
                 justifyContent: 'center',
                 gap: '10px',
                 background: 'transparent',
-                color: 'var(--blanc)',
-                border: '1px solid rgba(255,255,255,0.45)',
-                padding: '18px 44px',
+                color: 'var(--noir)',
+                border: '1px solid var(--noir)',
+                padding: '18px 48px',
                 fontFamily: 'var(--font-inter)',
                 fontSize: '11px',
                 fontWeight: 500,
@@ -193,11 +308,72 @@ export default function NoviasContent() {
                 textDecoration: 'none',
                 transition: 'all 0.3s ease',
               }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = 'var(--noir)';
+                el.style.color = 'var(--blanc)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = 'transparent';
+                el.style.color = 'var(--noir)';
+              }}
             >
               <span aria-hidden="true">←</span> Otros servicios
             </Link>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          {/* Puntitos del carrusel */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            style={{ display: 'flex', gap: '8px', marginTop: '40px' }}
+          >
+            {NOVIA_GALLERY.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Foto ${i + 1}`}
+                style={{
+                  width: i === current ? '24px' : '6px',
+                  height: '6px',
+                  background: i === current ? 'var(--champagne)' : 'rgba(0,0,0,0.2)',
+                  border: 'none',
+                  borderRadius: '3px',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.4s ease',
+                }}
+              />
+            ))}
+          </motion.div>
+
+          {/* Indicador de scroll */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            style={{
+              position: 'absolute',
+              bottom: '32px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              color: 'var(--cendre)',
+            }}
+          >
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+            >
+              <ChevronDown size={18} strokeWidth={1.5} />
+            </motion.div>
+          </motion.div>
+        </div>
+
       </section>
 
       {/* ===== LA EXPERIENCIA (pasos) ===== */}
@@ -487,6 +663,17 @@ export default function NoviasContent() {
       </section>
 
       <style jsx global>{`
+        @media (min-width: 769px) {
+          .novia-hero-section {
+            aspect-ratio: 4 / 5;
+            min-height: 100vh;
+          }
+        }
+        @media (max-width: 768px) {
+          .novia-hero-section {
+            min-height: 100vh;
+          }
+        }
         .novia-pasos {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
