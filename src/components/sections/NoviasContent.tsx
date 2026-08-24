@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { getService } from '@/lib/services';
 import { formatGs } from '@/lib/formatters';
@@ -70,11 +70,13 @@ export default function NoviasContent() {
   const novia = getService('novia')!;
   const desde = novia.base + (novia.included?.price ?? 0);
 
-  const [current, setCurrent] = useState(0);
+  // [foto actual, foto que sale] — guardamos la que sale para que se
+  // deslice hacia la izquierda mientras entra la nueva por la derecha.
+  const [[current, leaving], setSlide] = useState<[number, number]>([0, -1]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % NOVIA_GALLERY.length);
+      setSlide(([c]) => [(c + 1) % NOVIA_GALLERY.length, c]);
     }, INTERVAL_MS);
     return () => clearInterval(timer);
   }, []);
@@ -102,12 +104,14 @@ export default function NoviasContent() {
             zIndex: 0,
           }}
         >
-          <AnimatePresence initial={false}>
+          {/* Todas las fotos quedan montadas y se mueven de lugar.
+              Así no hay que volver a cargarlas en cada cambio y
+              nunca aparece el destello en blanco. */}
+          {NOVIA_GALLERY.map((src, i) => (
             <motion.div
-              key={current}
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
+              key={src}
+              initial={false}
+              animate={{ x: i === current ? '0%' : i === leaving ? '-100%' : '100%' }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               style={{
                 position: 'absolute',
@@ -118,15 +122,15 @@ export default function NoviasContent() {
               }}
             >
               <Image
-                src={NOVIA_GALLERY[current]}
+                src={src}
                 alt="Novia maquillada por Romy Ramos"
                 fill
                 style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                priority={current === 0}
                 sizes="100vw"
+                {...(i === 0 ? { priority: true } : { loading: 'eager' as const })}
               />
             </motion.div>
-          </AnimatePresence>
+          ))}
         </div>
 
         {/* Velo blanco */}
@@ -333,7 +337,7 @@ export default function NoviasContent() {
             {NOVIA_GALLERY.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
+                onClick={() => setSlide(([c]) => [i, c])}
                 aria-label={`Foto ${i + 1}`}
                 style={{
                   width: i === current ? '24px' : '6px',
@@ -634,6 +638,9 @@ export default function NoviasContent() {
             </h2>
           </motion.div>
 
+          {/* Solo visible en celular: avisa que la galería se desliza */}
+          <p className="novia-galeria-hint">Deslizá para ver más →</p>
+
           <div className="novia-galeria">
             {NOVIA_GALLERY.map((src, i) => (
               <motion.div
@@ -696,11 +703,46 @@ export default function NoviasContent() {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
+        /* La pista de deslizar solo aparece en celular */
+        .novia-galeria-hint {
+          display: none;
+        }
         @media (max-width: 640px) {
           .novia-pasos,
-          .novia-incluye,
-          .novia-galeria {
+          .novia-incluye {
             grid-template-columns: 1fr !important;
+          }
+          /* En celular la galería se desliza de costado en vez de
+             apilarse, para no alargar el scroll hasta el presupuesto */
+          .novia-galeria {
+            display: flex !important;
+            grid-template-columns: none !important;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 12px !important;
+            /* se sale del padding del contenedor para llegar al borde */
+            margin: 0 -20px;
+            padding: 0 20px 8px;
+            scrollbar-width: none;
+          }
+          .novia-galeria::-webkit-scrollbar {
+            display: none;
+          }
+          .novia-galeria > * {
+            flex: 0 0 78%;
+            scroll-snap-align: center;
+          }
+          .novia-galeria-hint {
+            display: block;
+            text-align: center;
+            margin: -40px 0 24px;
+            font-family: var(--font-inter);
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--cendre);
           }
           .novia-cta-group {
             flex-direction: column !important;
