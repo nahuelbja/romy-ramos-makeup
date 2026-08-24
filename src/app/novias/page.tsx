@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NoviasContent from '@/components/sections/NoviasContent';
 import Calculator from '@/components/sections/Calculator';
+import Policies, { NOVIA_POLICIES } from '@/components/sections/Policies';
 import Contact from '@/components/sections/Contact';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -30,6 +31,7 @@ export default function NoviasPage() {
       <main>
         <NoviasContent />
         <Calculator lockedService="novia" hideSectionHeader={false} />
+        <Policies policies={NOVIA_POLICIES} />
         <Contact />
       </main>
       <Footer />

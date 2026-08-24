@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 
+// Políticas de los servicios generales (Social y Glam)
 const POLICIES = [
   'Para confirmar la fecha, día y hora del servicio es necesario abonar una seña mínima desde Gs. 100.000.',
   'La totalidad del servicio se cancela antes de realizarse.',
@@ -9,9 +10,21 @@ const POLICIES = [
   'La seña no es reembolsable.',
 ];
 
+// Políticas del servicio de novia — la seña es del 50%
+export const NOVIA_POLICIES = [
+  'Para confirmar la fecha, día y hora del servicio es necesario abonar una seña del 50% del total del servicio.',
+  'El 50% restante se cancela antes de realizarse el servicio.',
+  'El presupuesto no es reembolsable ni modificable.',
+  'La seña no es reembolsable.',
+];
+
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-export default function Policies() {
+export default function Policies({
+  policies = POLICIES,
+}: {
+  policies?: string[];
+} = {}) {
   return (
     <section
       style={{
@@ -67,7 +80,7 @@ export default function Policies() {
         </motion.div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-          {POLICIES.map((policy, i) => (
+          {policies.map((policy, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
@@ -79,7 +92,7 @@ export default function Policies() {
                 gap: '24px',
                 alignItems: 'flex-start',
                 padding: '24px 0',
-                borderBottom: i < POLICIES.length - 1 ? '1px solid rgba(0,0,0,0.07)' : 'none',
+                borderBottom: i < policies.length - 1 ? '1px solid rgba(0,0,0,0.07)' : 'none',
               }}
             >
               <span
