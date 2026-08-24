@@ -8,14 +8,18 @@ import { formatGs } from '@/lib/formatters';
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-// Fotos de novia — reemplazar por fotos reales de novias cuando estén listas
+// Foto de portada de la página de novias
+export const NOVIA_HERO = '/novia-6.jpg';
+
+// Galería "Mis Novias" — para agregar o cambiar fotos,
+// subilas a /public y editá esta lista.
 export const NOVIA_GALLERY = [
-  '/IMG_0215.jpeg',
-  '/IMG_0219.jpeg',
-  '/IMG_0221.jpeg',
-  '/IMG_0223.jpeg',
-  '/IMG_0225.jpeg',
-  '/IMG_0226.jpeg',
+  '/novia-1.jpg',
+  '/novia-2.jpg',
+  '/novia-3.jpg',
+  '/novia-4.jpg',
+  '/novia-5.jpg',
+  '/novia-6.jpg',
 ];
 
 const INCLUYE = [
@@ -70,7 +74,7 @@ export default function NoviasContent() {
         }}
       >
         <Image
-          src={NOVIA_GALLERY[0]}
+          src={NOVIA_HERO}
           alt="Novia maquillada por Romy Ramos"
           fill
           priority
