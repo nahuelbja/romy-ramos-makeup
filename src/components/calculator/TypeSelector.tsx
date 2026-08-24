@@ -15,7 +15,8 @@ export default function TypeSelector({ services, selected, onChange }: TypeSelec
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        // se adapta a la cantidad de servicios, así no quedan columnas vacías
+        gridTemplateColumns: `repeat(${services.length}, 1fr)`,
         gap: '2px',
         background: 'rgba(255,255,255,0.08)',
         padding: '2px',
