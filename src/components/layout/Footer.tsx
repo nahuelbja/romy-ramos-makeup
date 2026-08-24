@@ -1,11 +1,12 @@
 'use client';
 
 const navLinks = [
-  { label: 'Inicio', href: '#inicio' },
-  { label: 'Sobre mí', href: '#sobre-mi' },
-  { label: 'Servicios', href: '#servicios' },
-  { label: 'Presupuesto', href: '#presupuesto' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'Inicio', href: '/#inicio' },
+  { label: 'Sobre mí', href: '/#sobre-mi' },
+  { label: 'Servicios', href: '/#servicios' },
+  { label: 'Novias', href: '/novias' },
+  { label: 'Presupuesto', href: '/#presupuesto' },
+  { label: 'Contacto', href: '/#contacto' },
 ];
 
 export default function Footer() {

@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { X, Menu } from 'lucide-react';
 
 const navLeft = [
-  { label: 'Inicio', href: '#inicio' },
-  { label: 'Sobre mí', href: '#sobre-mi' },
-  { label: 'Servicios', href: '#servicios' },
+  { label: 'Inicio', href: '/#inicio' },
+  { label: 'Sobre mí', href: '/#sobre-mi' },
+  { label: 'Servicios', href: '/#servicios' },
 ];
 
 const navRight = [
-  { label: 'Presupuesto', href: '#presupuesto' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'Novias', href: '/novias' },
+  { label: 'Presupuesto', href: '/#presupuesto' },
+  { label: 'Contacto', href: '/#contacto' },
 ];
 
 const navLinkStyle: React.CSSProperties = {
@@ -69,7 +70,7 @@ export default function Header() {
 
           {/* Logo — center */}
           <a
-            href="#inicio"
+            href="/#inicio"
             style={{
               textDecoration: 'none',
               textAlign: 'center',

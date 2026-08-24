@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const HERO_IMAGES = [
   '/IMG_0218.jpeg',
@@ -213,6 +214,14 @@ export default function Hero() {
           animate="visible"
           custom={0.55}
           variants={fadeUp}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+          className="hero-cta-group"
         >
           <a
             href="#presupuesto"
@@ -245,6 +254,40 @@ export default function Hero() {
           >
             Calcular Presupuesto
           </a>
+
+          <Link
+            href="/novias"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              background: 'transparent',
+              color: 'var(--noir)',
+              border: '1px solid var(--champagne)',
+              padding: '18px 48px',
+              fontFamily: 'var(--font-inter)',
+              fontSize: '11px',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.3em',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget;
+              el.style.background = 'var(--champagne)';
+              el.style.color = 'var(--blanc)';
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget;
+              el.style.background = 'transparent';
+              el.style.color = 'var(--noir)';
+            }}
+          >
+            Soy Novia
+            <span aria-hidden="true">→</span>
+          </Link>
         </motion.div>
 
         {/* Slide dots */}
@@ -308,6 +351,18 @@ export default function Hero() {
         @media (max-width: 768px) {
           .hero-section {
             min-height: 100vh;
+          }
+        }
+        @media (max-width: 560px) {
+          .hero-cta-group {
+            flex-direction: column !important;
+            width: 100%;
+            max-width: 320px;
+            gap: 12px !important;
+          }
+          .hero-cta-group a {
+            width: 100% !important;
+            padding: 16px 24px !important;
           }
         }
       `}</style>

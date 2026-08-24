@@ -10,8 +10,14 @@ import ExtraItem from '@/components/calculator/ExtraItem';
 import TotalBar from '@/components/calculator/TotalBar';
 import ToggleGroup from '@/components/calculator/ToggleGroup';
 
-export default function Calculator() {
-  const [serviceType, setServiceType] = useState<ServiceType>('social');
+export default function Calculator({
+  lockedService,
+  hideSectionHeader = false,
+}: {
+  lockedService?: ServiceType;
+  hideSectionHeader?: boolean;
+} = {}) {
+  const [serviceType, setServiceType] = useState<ServiceType>(lockedService ?? 'social');
   const [selectedExtras, setSelectedExtras] = useState<Set<string>>(new Set());
   const [companionCount, setCompanionCount] = useState(1);
   const [companionWithLashes, setCompanionWithLashes] = useState(false);
@@ -127,6 +133,7 @@ export default function Calculator() {
     >
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 40px' }} className="calc-container">
         {/* Section header */}
+        {!hideSectionHeader && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -183,6 +190,7 @@ export default function Calculator() {
             Personalizá tu servicio y obtené un estimado al instante.
           </p>
         </motion.div>
+        )}
 
         {/* Card */}
         <motion.div
@@ -196,6 +204,7 @@ export default function Calculator() {
           }}
         >
           {/* Type selector */}
+          {!lockedService && (
           <div style={{ padding: '24px 24px 0' }}>
             <TypeSelector
               services={SERVICES}
@@ -203,6 +212,7 @@ export default function Calculator() {
               onChange={handleTypeChange}
             />
           </div>
+          )}
 
           {/* Base price display */}
           <div
