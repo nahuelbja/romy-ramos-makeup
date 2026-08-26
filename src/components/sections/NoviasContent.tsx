@@ -43,10 +43,6 @@ const INCLUYE = [
     detalle: 'Adaptado a tu tipo de piel: seca, oleosa o madura.',
   },
   {
-    titulo: 'Productos de larga duración',
-    detalle: 'Cosmética profesional que aguanta el día entero y las fotos.',
-  },
-  {
     titulo: 'Pestañas postizas',
     detalle: 'Aplicación opcional, sin costo adicional.',
   },

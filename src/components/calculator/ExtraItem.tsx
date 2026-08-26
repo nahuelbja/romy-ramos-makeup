@@ -123,14 +123,14 @@ export default function ExtraItem({
                   color: 'rgba(255,255,255,0.5)',
                 }}
               >
-                Cantidad
+                {extra.quantityLabel ?? 'Cantidad'}
               </span>
               <QuantitySelector
                 value={quantity}
                 min={1}
-                max={10}
+                max={extra.quantityMax ?? 10}
                 onChange={onQuantityChange}
-                label="acompañantes"
+                label={extra.quantityUnit ?? 'acompañantes'}
               />
             </div>
           )}

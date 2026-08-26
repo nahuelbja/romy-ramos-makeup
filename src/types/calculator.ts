@@ -6,6 +6,11 @@ export interface ExtraOption {
   note?: string;
   price: number;
   hasQuantity?: boolean;
+  /** Título del selector de cantidad. Por defecto "Cantidad". */
+  quantityLabel?: string;
+  /** Qué se está contando: "acompañantes", "horas". Se usa en el resumen. */
+  quantityUnit?: string;
+  quantityMax?: number;
   hasToggle?: boolean;
   toggleLabel?: string;
   togglePrice?: number;
@@ -22,6 +27,8 @@ export interface Service {
   number: string;
   name: string;
   base: number;
+  /** Cómo se titula el precio base. Por defecto "Precio base — {nombre}". */
+  baseLabel?: string;
   extras: ExtraOption[];
   included?: IncludedItem;
 }

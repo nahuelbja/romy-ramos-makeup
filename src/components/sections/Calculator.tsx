@@ -23,7 +23,14 @@ export default function Calculator({
 } = {}) {
   const [serviceType, setServiceType] = useState<ServiceType>(lockedService ?? 'social');
   const [selectedExtras, setSelectedExtras] = useState<Set<string>>(new Set());
-  const [companionCount, setCompanionCount] = useState(1);
+  // cada adicional lleva su propia cantidad: las horas de acompañamiento
+  // no tienen nada que ver con el número de acompañantes
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const getQty = useCallback((id: string) => quantities[id] ?? 1, [quantities]);
+  const setQty = useCallback(
+    (id: string, val: number) => setQuantities((q) => ({ ...q, [id]: val })),
+    []
+  );
   const [companionWithLashes, setCompanionWithLashes] = useState(false);
   const [city, setCity] = useState<CityOption>('none');
 
@@ -35,7 +42,7 @@ export default function Calculator({
   const handleTypeChange = useCallback((type: ServiceType) => {
     setServiceType(type);
     setSelectedExtras(new Set());
-    setCompanionCount(1);
+    setQuantities({});
     setCompanionWithLashes(false);
     setCity('none');
   }, []);
@@ -62,11 +69,13 @@ export default function Calculator({
       if (!selectedExtras.has(extra.id)) continue;
 
       if (extra.hasQuantity) {
+        const qty = quantities[extra.id] ?? 1;
         const unitPrice = extra.price + (companionWithLashes && extra.hasToggle ? (extra.togglePrice ?? 0) : 0);
-        const totalPrice = unitPrice * companionCount;
+        const totalPrice = unitPrice * qty;
+        const unidad = extra.quantityUnit ? ` ${extra.quantityUnit}` : '';
         extras += totalPrice;
         extrasBreakdown.push({
-          label: `${extra.label} x${companionCount}${companionWithLashes ? ' + pestañas' : ''}`,
+          label: `${extra.label} x${qty}${unidad}${companionWithLashes && extra.hasToggle ? ' + pestañas' : ''}`,
           price: totalPrice,
         });
       } else {
@@ -93,7 +102,7 @@ export default function Calculator({
       total: subtotalBase + trasladoPrice,
       extrasBreakdown,
     };
-  }, [currentService, selectedExtras, companionCount, companionWithLashes, city, serviceType]);
+  }, [currentService, selectedExtras, quantities, companionWithLashes, city, serviceType]);
 
   const calNotes = useMemo(() => {
     const lines: string[] = [`Servicio: ${currentService.name}`];
@@ -239,7 +248,7 @@ export default function Calculator({
                 color: 'rgba(255,255,255,0.5)',
               }}
             >
-              Precio base — {currentService.name}
+              {currentService.baseLabel ?? `Precio base — ${currentService.name}`}
             </span>
             <span
               style={{
@@ -336,8 +345,8 @@ export default function Calculator({
                   extra={extra}
                   checked={selectedExtras.has(extra.id)}
                   onToggle={toggleExtra}
-                  quantity={companionCount}
-                  onQuantityChange={setCompanionCount}
+                  quantity={getQty(extra.id)}
+                  onQuantityChange={(val) => setQty(extra.id, val)}
                   withLashes={companionWithLashes}
                   onLashesToggle={setCompanionWithLashes}
                 />

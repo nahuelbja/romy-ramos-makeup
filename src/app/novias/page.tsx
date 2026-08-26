@@ -12,7 +12,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 export const metadata: Metadata = {
   title: 'Novias — Romy Ramos Makeup | Maquillaje de novia en Paraguay',
   description:
-    'Maquillaje profesional para novias en Paraguay. Prueba previa, spot de maquillaje, productos de larga duración y acompañamiento en tu gran día.',
+    'Maquillaje profesional para novias en Paraguay. Prueba previa, spot de maquillaje y acompañamiento en tu gran día.',
   openGraph: {
     title: 'Novias — Romy Ramos Makeup',
     description:

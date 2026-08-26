@@ -20,7 +20,6 @@ const featuresMap: Record<string, string[]> = {
   novia: [
     'Facial básico previo al maquillaje',
     'Diseño de piel personalizado (piel seca, oleosa o madura)',
-    'Productos profesionales de larga duración',
     'Aplicación de pestañas postizas (opcional, sin costo adicional)',
     'Bata de novia durante todo el procedimiento',
   ],

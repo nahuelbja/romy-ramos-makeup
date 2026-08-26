@@ -34,6 +34,7 @@ export const SERVICES: Service[] = [
     number: '03',
     name: 'Novia',
     base: 850000,
+    baseLabel: 'Servicio de maquillaje nupcial',
     included: {
       label: 'Spot de maquillaje',
       price: 500000,
@@ -41,6 +42,7 @@ export const SERVICES: Service[] = [
         'Incluye silla profesional de maquillaje, luces, bata de novia y todas las comodidades para tu gran día.',
     },
     extras: [
+      // --- Para la novia ---
       {
         id: 'prueba_maquillaje',
         label: 'Prueba de maquillaje',
@@ -53,30 +55,14 @@ export const SERVICES: Service[] = [
         price: 400000,
       },
       {
-        id: 'acompanantes',
-        label: 'Maquillajes para acompañantes',
-        price: 300000,
-        hasQuantity: true,
-        hasToggle: true,
-        toggleLabel: '+ pestañas',
-        togglePrice: 50000,
-      },
-      {
         id: 'peinado_novia',
         label: 'Peinado de novia',
         price: 700000,
       },
       {
-        id: 'peinado_acompanantes',
-        label: 'Peinado para acompañantes',
-        note: 'desde Gs. 300.000, ajuste por WhatsApp',
-        price: 300000,
-        hasQuantity: true,
-      },
-      {
-        id: 'acompanamiento',
-        label: 'Acompañamiento durante la boda',
-        price: 850000,
+        id: 'cambio_look',
+        label: 'Cambio de look (2do maquillaje)',
+        price: 400000,
       },
       {
         id: 'sesion_fotos',
@@ -85,9 +71,33 @@ export const SERVICES: Service[] = [
         price: 500000,
       },
       {
-        id: 'cambio_look',
-        label: 'Cambio de look (2do maquillaje)',
+        id: 'acompanamiento',
+        label: 'Acompañamiento durante la boda',
+        note: 'Gs. 400.000 por hora',
         price: 400000,
+        hasQuantity: true,
+        quantityLabel: 'Horas',
+        quantityUnit: 'horas',
+        quantityMax: 12,
+      },
+      // --- Para las acompañantes ---
+      {
+        id: 'acompanantes',
+        label: 'Maquillajes para acompañantes',
+        price: 300000,
+        hasQuantity: true,
+        quantityUnit: 'acompañantes',
+        hasToggle: true,
+        toggleLabel: '+ pestañas',
+        togglePrice: 50000,
+      },
+      {
+        id: 'peinado_acompanantes',
+        label: 'Peinado para acompañantes',
+        note: 'desde Gs. 300.000, ajuste por WhatsApp',
+        price: 300000,
+        hasQuantity: true,
+        quantityUnit: 'acompañantes',
       },
     ],
   },
